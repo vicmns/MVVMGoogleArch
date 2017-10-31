@@ -1,0 +1,47 @@
+package com.lonelystudios.palantir.ui.sources
+
+import android.arch.lifecycle.ViewModelProvider
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.lonelystudios.palantir.databinding.AdapterSourcesGridRowItemBinding
+import com.lonelystudios.palantir.utils.DataBindingAdapters
+import com.lonelystudios.palantir.vo.sources.Source
+import timber.log.Timber
+
+
+/**
+ * Created by vicmns on 10/27/17.
+ */
+class SourcesGridAdapter(activity: SourcesActivity,
+                         viewModelFactory: ViewModelProvider.Factory) :
+        CommonSourceAdapter<SourcesGridAdapter.SourcesGridViewHolder>(activity, viewModelFactory) {
+
+
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SourcesGridViewHolder {
+        val layoutInflater = LayoutInflater.from(parent?.context)
+        val itemRowBinding = AdapterSourcesGridRowItemBinding.inflate(layoutInflater, parent, false)
+        return SourcesGridViewHolder(itemRowBinding)
+    }
+
+
+
+    override fun onBindViewHolder(holder: SourcesGridViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        if(payloads != null && payloads.contains(UPDATE_SOURCE_LOGO)) {
+            Timber.d("Payloads: Updating source logo for position: %d", position)
+               DataBindingAdapters.setSourceLogo(holder?.itemViewRowItemBinding?.sourceLogo,
+                       sourcesList[position])
+        } else {
+            Timber.d("Calling general bind view holder on position: %d", position)
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
+    class SourcesGridViewHolder(val itemViewRowItemBinding: AdapterSourcesGridRowItemBinding) :
+            CommonSourceAdapter.SourcesViewHolder(itemViewRowItemBinding) {
+
+        override fun bindRow(source: Source) {
+            itemViewRowItemBinding.source = source
+        }
+    }
+
+}

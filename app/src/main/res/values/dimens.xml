@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="source_grid_item_inset">12dp</dimen>
+</resources>
