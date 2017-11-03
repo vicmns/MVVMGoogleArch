@@ -9,11 +9,17 @@
         <variable
             name="source"
             type="com.lonelystudios.palantir.vo.sources.Source"/>
+
+        <variable name="handlers"
+                  type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
+
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{(v) -> handlers.onClick(v)}"
         android:orientation="horizontal">
 
         <FrameLayout

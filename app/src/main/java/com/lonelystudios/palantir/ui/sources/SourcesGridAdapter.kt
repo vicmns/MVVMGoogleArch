@@ -36,11 +36,12 @@ class SourcesGridAdapter(activity: SourcesActivity,
         }
     }
 
-    class SourcesGridViewHolder(val itemViewRowItemBinding: AdapterSourcesGridRowItemBinding) :
-            CommonSourceAdapter.SourcesViewHolder(itemViewRowItemBinding) {
+    inner class SourcesGridViewHolder(val itemViewRowItemBinding: AdapterSourcesGridRowItemBinding) :
+            SourcesViewHolder(itemViewRowItemBinding) {
 
         override fun bindRow(source: Source) {
             itemViewRowItemBinding.source = source
+            itemViewRowItemBinding.handlers = this
         }
     }
 

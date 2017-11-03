@@ -18,7 +18,7 @@ import timber.log.Timber
 /**
  * Created by vicmns on 10/30/17.
  */
-abstract class CommonSourceAdapter<T : CommonSourceAdapter.SourcesViewHolder>(
+abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>(
         protected val activity: SourcesActivity,
         private val viewModelFactory: ViewModelProvider.Factory) : RecyclerView.Adapter<T>() {
 
@@ -114,10 +114,22 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter.SourcesViewHolder>(
         return sourcesList[position].id.toLong()
     }
 
-    abstract class SourcesViewHolder(itemViewRowItemBinding: ViewDataBinding) :
-            RecyclerView.ViewHolder(itemViewRowItemBinding.root) {
+    inner abstract class SourcesViewHolder(itemViewRowItemBinding: ViewDataBinding) :
+            RecyclerView.ViewHolder(itemViewRowItemBinding.root), HolderHandlers {
 
         abstract fun bindRow(source: Source)
+
+        override fun onClick(view: View) {
+            activity.onCardClicked(adapterPosition, sourcesList[adapterPosition])
+        }
+    }
+
+    interface HolderHandlers {
+        fun onClick(view: View)
+    }
+
+    interface AdapterHandlers {
+        fun onCardClicked(position: Int, source: Source)
     }
 
     companion object {

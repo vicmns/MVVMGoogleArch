@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
@@ -18,10 +19,11 @@ import com.lonelystudios.palantir.utils.GridSpacingItemDecoration
 import com.lonelystudios.palantir.vo.Resource
 import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
+import timber.log.Timber
 import javax.inject.Inject
 
 
-class SourcesActivity : AppCompatActivity() {
+class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var sourcesViewModel: SourcesViewModel
@@ -164,5 +166,10 @@ class SourcesActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCardClicked(position: Int, source: Source) {
+        Snackbar.make(detailBinding.root, "Position clicked: " + position, Snackbar.LENGTH_SHORT).show()
+        Timber.d("Item clicked: %d", position)
     }
 }

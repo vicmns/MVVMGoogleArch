@@ -7,11 +7,16 @@
         <variable
             name="source"
             type="com.lonelystudios.palantir.vo.sources.Source"/>
+
+        <variable name="handlers"
+                  type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
     </data>
 
     <com.lonelystudios.palantir.views.SquareCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{(v) -> handlers.onClick(v)}"
         app:cardCornerRadius="4dp">
 
         <android.support.constraint.ConstraintLayout
