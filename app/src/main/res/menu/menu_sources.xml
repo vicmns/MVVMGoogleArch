@@ -5,14 +5,14 @@
     <item
         android:id="@+id/action_show_grid"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_view_module_black_24dp"
+        android:icon="@drawable/ic_view_module_white_24dp"
         android:title="@string/action_view_grid_mode"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_show_list"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_view_list_black_24dp"
+        android:icon="@drawable/ic_view_list_white_24dp"
         android:title="@string/action_view_list_mode"
         app:showAsAction="ifRoom"/>
 </menu>
