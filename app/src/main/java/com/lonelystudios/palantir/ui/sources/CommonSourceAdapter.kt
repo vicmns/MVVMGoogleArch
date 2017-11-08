@@ -14,6 +14,7 @@ import com.lonelystudios.palantir.vo.Resource
 import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
 import timber.log.Timber
+import java.util.*
 
 /**
  * Created by vicmns on 10/30/17.
@@ -22,7 +23,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
         protected val activity: SourcesActivity,
         private val viewModelFactory: ViewModelProvider.Factory) : RecyclerView.Adapter<T>() {
 
-
+    val random = Random()
     var sourcesList: MutableList<Source> = ArrayList()
         set(value) {
             field = value
@@ -36,7 +37,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
     private var recyclerView: RecyclerView? = null
 
     override fun onBindViewHolder(holder: T, position: Int) {
-        runEnterAnimation(holder.itemView, position)
+        //runEnterAnimation(holder.itemView, position)
         Timber.d("onBindViewHolder: positon: %d", position)
         val item = sourcesList[position]
         val viewModel: SourceItemViewModel =
@@ -52,19 +53,25 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
                                 Status.SUCCESS -> {
                                     if (resource.data != null) {
                                         viewModel.sourcesLiveData.removeObserver(this)
-                                        val cPosition = sourcesListIdToPositionsMap[resource.data.id]
-                                        Timber.d("Resource updated, getting image on url:" +
-                                                " %s for position: %d", resource.data.urlToLogo, cPosition)
-                                        if(cPosition != null) {
+                                        val cPosition = holder.adapterPosition
+                                        if(cPosition >= 0) {
                                             sourcesLogoCallsMap.remove(cPosition)
-                                            sourcesList[cPosition] = resource.data
+                                            sourcesList[cPosition].urlToLogo = resource.data.urlToLogo
+                                            sourcesList[cPosition].isUrlLogoAvailable = resource.data.isUrlLogoAvailable
                                             recyclerView?.post({
                                                 notifyItemChanged(cPosition, UPDATE_SOURCE_LOGO)
                                             })
                                         }
                                     }
                                 }
-                                Status.ERROR -> viewModel.sourcesLiveData.removeObserver(this)
+                                Status.CANCEL, Status.ERROR -> {
+                                    viewModel.sourcesLiveData.removeObserver(this)
+                                    val cPosition = holder.adapterPosition
+                                    if(cPosition >= 0) {
+                                        sourcesLogoCallsMap.remove(cPosition)
+                                    }
+                                }
+                                else -> {}
                             }
                         }
                     }
@@ -111,7 +118,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
     }
 
     override fun getItemId(position: Int): Long {
-        return sourcesList[position].id.toLong()
+        return sourcesList[position].id.hashCode().toLong()
     }
 
     inner abstract class SourcesViewHolder(itemViewRowItemBinding: ViewDataBinding) :

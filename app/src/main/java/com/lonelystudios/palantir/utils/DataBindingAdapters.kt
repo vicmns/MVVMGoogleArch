@@ -47,7 +47,7 @@ object DataBindingAdapters {
                     }
                 }).placeholder(R.drawable.placeholder).into(imageView)
             }
+            progressBar.visibility = View.GONE
         }
-
     }
 }

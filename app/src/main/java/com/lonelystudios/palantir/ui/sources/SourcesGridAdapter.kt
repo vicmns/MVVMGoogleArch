@@ -16,14 +16,11 @@ class SourcesGridAdapter(activity: SourcesActivity,
                          viewModelFactory: ViewModelProvider.Factory) :
         CommonSourceAdapter<SourcesGridAdapter.SourcesGridViewHolder>(activity, viewModelFactory) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SourcesGridViewHolder {
         val layoutInflater = LayoutInflater.from(parent?.context)
         val itemRowBinding = AdapterSourcesGridRowItemBinding.inflate(layoutInflater, parent, false)
         return SourcesGridViewHolder(itemRowBinding)
     }
-
-
 
     override fun onBindViewHolder(holder: SourcesGridViewHolder?, position: Int, payloads: MutableList<Any>?) {
         if(payloads != null && payloads.contains(UPDATE_SOURCE_LOGO)) {
@@ -31,7 +28,6 @@ class SourcesGridAdapter(activity: SourcesActivity,
                DataBindingAdapters.setSourceLogo(holder?.itemViewRowItemBinding?.sourceLogo,
                        sourcesList[position])
         } else {
-            Timber.d("Calling general bind view holder on position: %d", position)
             super.onBindViewHolder(holder, position, payloads)
         }
     }
