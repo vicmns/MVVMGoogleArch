@@ -37,8 +37,6 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
     private var recyclerView: RecyclerView? = null
 
     override fun onBindViewHolder(holder: T, position: Int) {
-        //runEnterAnimation(holder.itemView, position)
-        Timber.d("onBindViewHolder: positon: %d", position)
         val item = sourcesList[position]
         val viewModel: SourceItemViewModel =
                 ViewModelProviders.of(activity, viewModelFactory).get(item.id, SourceItemViewModel::class.java)
@@ -81,29 +79,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
             }
         }
     }
-
-    private fun runEnterAnimation(view: View?, position: Int) {
-        if (animationsLocked) return
-
-        if (position > lastAnimatedPosition) {
-            lastAnimatedPosition = position
-            view?.translationY = 100f
-            view?.alpha = 0f
-            view?.animate()
-                    ?.translationY(0f)?.alpha(1f)
-                    ?.setStartDelay(if (delayEnterAnimation) (20 * position).toLong() else 0)
-                    ?.setInterpolator(DecelerateInterpolator(2f))
-                    ?.setDuration(300)
-                    ?.setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
-                            animationsLocked = true
-                            super.onAnimationEnd(animation, isReverse)
-                        }
-                    })
-                    ?.start()
-        }
-    }
-
+    
     override fun getItemCount(): Int {
         return sourcesList.size
     }

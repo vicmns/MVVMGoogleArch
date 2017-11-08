@@ -21,6 +21,10 @@ import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
 import timber.log.Timber
 import javax.inject.Inject
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
+
+
 
 
 class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers {
@@ -86,12 +90,22 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
         detailBinding.contentRecyclerView.adapter = sourceGridAdapter
         detailBinding.contentRecyclerView.layoutManager = gridLayoutManager
         detailBinding.contentRecyclerView.addItemDecoration(gridItemDecoration)
+
+        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.grid_layout_animation_from_bottom)
+        detailBinding.contentRecyclerView.layoutAnimation = animation
+        detailBinding.contentRecyclerView.adapter.notifyDataSetChanged()
+        detailBinding.contentRecyclerView.scheduleLayoutAnimation()
     }
 
     private fun setListAdapter() {
+        detailBinding.contentRecyclerView.removeItemDecoration(gridItemDecoration)
         detailBinding.contentRecyclerView.adapter = sourceListAdapter
         detailBinding.contentRecyclerView.layoutManager = listLayoutManager
-        detailBinding.contentRecyclerView.removeItemDecoration(gridItemDecoration)
+
+        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom)
+        detailBinding.contentRecyclerView.layoutAnimation = animation
+        detailBinding.contentRecyclerView.adapter.notifyDataSetChanged()
+        detailBinding.contentRecyclerView.scheduleLayoutAnimation()
     }
 
     private fun attachObservers() {
