@@ -22,15 +22,11 @@ class SourcesListAdapter(activity: SourcesActivity,
         return SourcesListViewHolder(itemRowBinding)
     }
 
-
-
     override fun onBindViewHolder(holder: SourcesListViewHolder?, position: Int, payloads: MutableList<Any>?) {
         if(payloads != null && payloads.contains(UPDATE_SOURCE_LOGO)) {
-            Timber.d("Payloads: Updating source logo for position: %d", position)
             DataBindingAdapters.setSourceLogo(holder?.itemViewRowItemBinding?.sourceLogo,
                     sourcesList[position])
         } else {
-            Timber.d("Calling general bind view holder on position: %d", position)
             super.onBindViewHolder(holder, position, payloads)
         }
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -10,8 +9,9 @@
             name="source"
             type="com.lonelystudios.palantir.vo.sources.Source"/>
 
-        <variable name="handlers"
-                  type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
+        <variable
+            name="handlers"
+            type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
 
     </data>
 
@@ -26,7 +26,6 @@
             android:id="@+id/sourceLogo"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:source="@{source}">
@@ -46,6 +45,28 @@
                 android:indeterminate="true"/>
 
         </FrameLayout>
+
+
+        <View
+            android:id="@+id/overlayView"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@color/adapter_source_selection_background"
+            android:visibility="@{source.isUserSelected, default = invisible}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/selectionImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_check_circle_black_24dp"
+            android:tint="@android:color/white"
+            android:visibility="@{source.isUserSelected, default = invisible}"
+            app:layout_constraintBottom_toTopOf="@+id/sourceLogo"
+            app:layout_constraintEnd_toEndOf="@+id/sourceLogo"
+            app:layout_constraintStart_toStartOf="@+id/sourceLogo"
+            app:layout_constraintTop_toBottomOf="@+id/sourceLogo"/>
 
         <TextView
             android:id="@+id/sourceName"

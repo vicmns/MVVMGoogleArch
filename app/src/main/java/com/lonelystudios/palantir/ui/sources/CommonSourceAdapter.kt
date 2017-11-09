@@ -1,20 +1,24 @@
 package com.lonelystudios.palantir.ui.sources
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
+import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.animation.DecelerateInterpolator
+import android.view.ViewGroup
 import com.lonelystudios.palantir.ui.SourceItemViewModel
 import com.lonelystudios.palantir.vo.Resource
 import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
 import timber.log.Timber
 import java.util.*
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
+
 
 /**
  * Created by vicmns on 10/30/17.
@@ -41,7 +45,14 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
         val viewModel: SourceItemViewModel =
                 ViewModelProviders.of(activity, viewModelFactory).get(item.id, SourceItemViewModel::class.java)
         holder.bindRow(sourcesList[position])
-        if(!sourcesLogoCallsMap.contains(position)) {
+        holder.rowItemBinding.addOnRebindCallback(object : OnRebindCallback<ViewDataBinding>() {
+            override fun onPreBind(binding: ViewDataBinding?): Boolean {
+                TransitionManager.beginDelayedTransition(
+                        binding!!.root as ViewGroup)
+                return super.onPreBind(binding)
+            }
+        })
+        if (!sourcesLogoCallsMap.contains(position)) {
             if (item.urlToLogo.isNullOrEmpty() && item.isUrlLogoAvailable) {
                 Timber.d("Url logo not available for item: %d", position)
                 viewModel.sourcesLiveData.observe(activity, object : Observer<Resource<Source>?> {
@@ -52,7 +63,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
                                     if (resource.data != null) {
                                         viewModel.sourcesLiveData.removeObserver(this)
                                         val cPosition = holder.adapterPosition
-                                        if(cPosition >= 0) {
+                                        if (cPosition >= 0) {
                                             sourcesLogoCallsMap.remove(cPosition)
                                             sourcesList[cPosition].urlToLogo = resource.data.urlToLogo
                                             sourcesList[cPosition].isUrlLogoAvailable = resource.data.isUrlLogoAvailable
@@ -65,11 +76,12 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
                                 Status.CANCEL, Status.ERROR -> {
                                     viewModel.sourcesLiveData.removeObserver(this)
                                     val cPosition = holder.adapterPosition
-                                    if(cPosition >= 0) {
+                                    if (cPosition >= 0) {
                                         sourcesLogoCallsMap.remove(cPosition)
                                     }
                                 }
-                                else -> {}
+                                else -> {
+                                }
                             }
                         }
                     }
@@ -79,7 +91,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
             }
         }
     }
-    
+
     override fun getItemCount(): Int {
         return sourcesList.size
     }
@@ -97,13 +109,17 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
         return sourcesList[position].id.hashCode().toLong()
     }
 
-    inner abstract class SourcesViewHolder(itemViewRowItemBinding: ViewDataBinding) :
-            RecyclerView.ViewHolder(itemViewRowItemBinding.root), HolderHandlers {
+    inner abstract class SourcesViewHolder(itemViewRowItemBinding: ViewDataBinding) : RecyclerView.ViewHolder(itemViewRowItemBinding.root), HolderHandlers {
+        val rowItemBinding: ViewDataBinding = itemViewRowItemBinding
 
         abstract fun bindRow(source: Source)
 
         override fun onClick(view: View) {
-            activity.onCardClicked(adapterPosition, sourcesList[adapterPosition])
+            val source = sourcesList[adapterPosition]
+            source.isUserSelected = !source.isUserSelected
+            //activity.onCardClicked(adapterPosition, source)
+            if(source.isUserSelected) notifyItemChanged(adapterPosition, ACTION_ADD_SOURCE)
+            else notifyItemChanged(adapterPosition, ACTION_REMOVE_SOURCE)
         }
     }
 
@@ -117,5 +133,7 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
 
     companion object {
         val UPDATE_SOURCE_LOGO = "update_source_logo"
+        val ACTION_ADD_SOURCE = "action_add_source"
+        val ACTION_REMOVE_SOURCE = "action_remove_source"
     }
 }

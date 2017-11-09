@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="adapter_source_bottom_view_background">#DDFFFFFF</color>
+    <color name="adapter_source_selection_background">#AA000000</color>
 </resources>

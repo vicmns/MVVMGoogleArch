@@ -12,6 +12,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.vo.sources.Source
+import android.databinding.BindingConversion
+
+
 
 
 /**
@@ -27,15 +30,15 @@ object DataBindingAdapters {
             val progressBar: ProgressBar = it.findViewById(R.id.sourceLogoProgressBar)
             source?.let {
                 progressBar.visibility = View.VISIBLE
-                if(!it.isUrlLogoAvailable) {
+                if (!it.isUrlLogoAvailable) {
                     progressBar.visibility = View.GONE
                     imageView.setImageResource(R.drawable.placeholder)
                     return
-                } else if(it.urlToLogo.isNullOrEmpty()) {
+                } else if (it.urlToLogo.isNullOrEmpty()) {
                     imageView.setImageResource(R.drawable.placeholder)
                     return
                 }
-                GlideApp.with(imageView.context).load(it.urlToLogo).listener(object: RequestListener<Drawable> {
+                GlideApp.with(imageView.context).load(it.urlToLogo).listener(object : RequestListener<Drawable> {
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         progressBar.visibility = View.GONE
                         return false
@@ -49,5 +52,11 @@ object DataBindingAdapters {
             }
             progressBar.visibility = View.GONE
         }
+    }
+
+    @JvmStatic
+    @BindingConversion
+    fun convertBooleanToVisibility(visible: Boolean): Int {
+        return if (visible) View.VISIBLE else View.INVISIBLE
     }
 }

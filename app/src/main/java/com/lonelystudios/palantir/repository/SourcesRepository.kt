@@ -74,4 +74,10 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
 
         return sourceLogo.asLiveData()
     }
+
+    fun updateSource(source: Source){
+        appExecutors.diskIO().execute {
+            sourcesDao.update(source)
+        }
+    }
 }

@@ -8,8 +8,9 @@
             name="source"
             type="com.lonelystudios.palantir.vo.sources.Source"/>
 
-        <variable name="handlers"
-                  type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
+        <variable
+            name="handlers"
+            type="com.lonelystudios.palantir.ui.sources.CommonSourceAdapter.HolderHandlers"/>
     </data>
 
     <com.lonelystudios.palantir.views.SquareCardView
@@ -77,6 +78,24 @@
                 android:padding="5dp"
                 android:text="@{source.description}"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <View
+                android:id="@+id/overlayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/adapter_source_selection_background"
+                android:visibility="@{source.isUserSelected, default = invisible}"/>
+
+            <ImageView
+                android:id="@+id/selectionImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_check_circle_black_24dp"
+                android:tint="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{source.isUserSelected, default = invisible}"/>
 
         </android.support.constraint.ConstraintLayout>
 

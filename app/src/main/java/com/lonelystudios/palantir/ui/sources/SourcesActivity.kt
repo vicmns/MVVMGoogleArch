@@ -5,14 +5,13 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.databinding.ActivitySourcesBinding
 import com.lonelystudios.palantir.utils.GridSpacingItemDecoration
@@ -21,10 +20,6 @@ import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
 import timber.log.Timber
 import javax.inject.Inject
-import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
-
-
 
 
 class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers {
@@ -38,6 +33,10 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var listLayoutManager: LinearLayoutManager
     private lateinit var gridItemDecoration: GridSpacingItemDecoration
+    private lateinit var gridItemAnimator: SourcesGridItemAnimator
+    private lateinit var listItemAnimator: SourcesListItemAnimator
+    private lateinit var gridItemsAnimator: LayoutAnimationController
+    private lateinit var listItemsAnimator: LayoutAnimationController
 
     private var isGridMode = true
 
@@ -47,6 +46,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
         sourcesViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(SourcesViewModel::class.java)
         setSupportActionBar(detailBinding.toolbar)
+        initItemAnimators()
         initRecyclerView()
         initAdapters()
         initLayoutManagers()
@@ -56,14 +56,16 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
         sourcesViewModel.getAllSources()
     }
 
+    private fun initItemAnimators() {
+        gridItemsAnimator = AnimationUtils.loadLayoutAnimation(this, R.anim.grid_layout_animation_from_bottom)
+        gridItemAnimator = SourcesGridItemAnimator()
+        gridItemAnimator.supportsChangeAnimations = false
+        listItemsAnimator = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom)
+        listItemAnimator = SourcesListItemAnimator()
+        listItemAnimator.supportsChangeAnimations = false
+    }
+
     private fun initRecyclerView() {
-        val animator = object : DefaultItemAnimator() {
-            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
-                return true
-            }
-        }
-        animator.supportsChangeAnimations = false
-        detailBinding.contentRecyclerView.itemAnimator = animator
         detailBinding.contentRecyclerView.setHasFixedSize(true)
     }
 
@@ -87,32 +89,31 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
     }
 
     private fun setGridAdapter() {
+        detailBinding.contentRecyclerView.itemAnimator = gridItemAnimator
         detailBinding.contentRecyclerView.adapter = sourceGridAdapter
         detailBinding.contentRecyclerView.layoutManager = gridLayoutManager
         detailBinding.contentRecyclerView.addItemDecoration(gridItemDecoration)
 
-        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.grid_layout_animation_from_bottom)
-        detailBinding.contentRecyclerView.layoutAnimation = animation
-        detailBinding.contentRecyclerView.adapter.notifyDataSetChanged()
+
+        detailBinding.contentRecyclerView.layoutAnimation = gridItemsAnimator
         detailBinding.contentRecyclerView.scheduleLayoutAnimation()
     }
 
     private fun setListAdapter() {
+        detailBinding.contentRecyclerView.itemAnimator = listItemAnimator
         detailBinding.contentRecyclerView.removeItemDecoration(gridItemDecoration)
         detailBinding.contentRecyclerView.adapter = sourceListAdapter
         detailBinding.contentRecyclerView.layoutManager = listLayoutManager
 
-        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom)
-        detailBinding.contentRecyclerView.layoutAnimation = animation
-        detailBinding.contentRecyclerView.adapter.notifyDataSetChanged()
+        detailBinding.contentRecyclerView.layoutAnimation = listItemsAnimator
         detailBinding.contentRecyclerView.scheduleLayoutAnimation()
     }
 
     private fun attachObservers() {
         sourcesViewModel.sourcesLiveData.observe(this, Observer<Resource<List<Source>>> { resources ->
 
-            if(resources != null) {
-                when(resources.status) {
+            if (resources != null) {
+                when (resources.status) {
                     Status.SUCCESS -> {
                         setDataToAdapters(resources.data)
                         hideLoadingIndicator()
@@ -128,7 +129,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
                     }
                 }
             }
-         })
+        })
     }
 
     private fun showLoadingIndicator() {
@@ -142,7 +143,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
     private fun setDataToAdapters(sources: List<Source>?) {
         sourceGridAdapter.sourcesList = sources?.toMutableList() ?: ArrayList()
         sourceListAdapter.sourcesList = sources?.toMutableList() ?: ArrayList()
-        if(isGridMode) sourceGridAdapter.notifyDataSetChanged()
+        if (isGridMode) sourceGridAdapter.notifyDataSetChanged()
         else sourceListAdapter.notifyDataSetChanged()
     }
 
@@ -172,7 +173,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
                 setGridAdapter()
                 true
             }
-            R.id.action_show_list ->  {
+            R.id.action_show_list -> {
                 isGridMode = false
                 invalidateOptionsMenu()
                 setListAdapter()
@@ -183,7 +184,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
     }
 
     override fun onCardClicked(position: Int, source: Source) {
-        Snackbar.make(detailBinding.root, "Position clicked: " + position, Snackbar.LENGTH_SHORT).show()
+        sourcesViewModel.updateSelectedSource(source)
         Timber.d("Item clicked: %d", position)
     }
 }

@@ -24,7 +24,6 @@ class SourcesGridAdapter(activity: SourcesActivity,
 
     override fun onBindViewHolder(holder: SourcesGridViewHolder?, position: Int, payloads: MutableList<Any>?) {
         if(payloads != null && payloads.contains(UPDATE_SOURCE_LOGO)) {
-            Timber.d("Payloads: Updating source logo for position: %d", position)
                DataBindingAdapters.setSourceLogo(holder?.itemViewRowItemBinding?.sourceLogo,
                        sourcesList[position])
         } else {

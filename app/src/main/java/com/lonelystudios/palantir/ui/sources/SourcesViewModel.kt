@@ -18,7 +18,7 @@ import javax.inject.Inject
 class SourcesViewModel @Inject constructor(private val sourcesRepository: SourcesRepository) : ViewModel() {
 
     val sourcesLiveData: LiveData<Resource<List<Source>>>
-    val triggerGetSources: MutableLiveData<Boolean> = MutableLiveData()
+    private val triggerGetSources: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         sourcesLiveData = Transformations.switchMap(triggerGetSources) {
@@ -29,5 +29,9 @@ class SourcesViewModel @Inject constructor(private val sourcesRepository: Source
 
     fun getAllSources() {
         triggerGetSources.value = true
+    }
+
+    fun updateSelectedSource(source: Source) {
+        sourcesRepository.updateSource(source)
     }
 }
