@@ -4,8 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import com.lonelystudios.palantir.net.LogoService
-import com.lonelystudios.palantir.net.NewsService
 import com.lonelystudios.palantir.repository.SourcesRepository
 import com.lonelystudios.palantir.utils.AbsentLiveData
 import com.lonelystudios.palantir.vo.Resource
@@ -22,7 +20,7 @@ class SourcesViewModel @Inject constructor(private val sourcesRepository: Source
 
     init {
         sourcesLiveData = Transformations.switchMap(triggerGetSources) {
-            if(it) sourcesRepository.getAllRepositories()
+            if(it) sourcesRepository.getAllSources()
             else AbsentLiveData.create()
         }
     }

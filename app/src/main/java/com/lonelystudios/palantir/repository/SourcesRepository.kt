@@ -25,7 +25,7 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
     lateinit var sourcesResource: CancelableNetworkBoundResource<List<Source>, Sources>
     lateinit var sourceLogo: CancelableNetworkBoundResource<Source, SourceLogoInfo>
 
-    fun getAllRepositories(): LiveData<Resource<List<Source>>> {
+    fun getAllSources(): LiveData<Resource<List<Source>>> {
         //if (sourcesResource != null) sourcesResource.cancelServiceCall()
         sourcesResource = object : CancelableNetworkBoundResource<List<Source>, Sources>(appExecutors) {
             override fun saveCallResult(item: Sources) {
@@ -33,21 +33,18 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
                 sourcesDao.insert(*sourceList.toTypedArray())
             }
 
-            override fun shouldFetch(data: List<Source>?): Boolean {
-                return data?.isEmpty() ?: false
-            }
+            override fun shouldFetch(data: List<Source>?): Boolean = data?.isEmpty() ?: false
 
-            override fun loadFromDb(): LiveData<List<Source>> {
-                return sourcesDao.getSources()
-            }
+            override fun loadFromDb(): LiveData<List<Source>> = sourcesDao.getSources()
 
-            override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<Sources>> {
-                return newsService.getAllSources()
-            }
+            override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<Sources>> =
+                    newsService.getAllSources()
         }
 
         return sourcesResource.asLiveData()
     }
+
+    fun getSelectedSources(): LiveData<List<Source>> = sourcesDao.getSelectedSources()
 
     fun getSourceLogo(source: Source): LiveData<Resource<Source>> {
         sourceLogo = object : CancelableNetworkBoundResource<Source, SourceLogoInfo>(appExecutors) {
@@ -58,17 +55,12 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
                 sourcesDao.update(source)
             }
 
-            override fun shouldFetch(data: Source?): Boolean {
-                return source.urlToLogo.isNullOrEmpty()
-            }
+            override fun shouldFetch(data: Source?): Boolean = source.urlToLogo.isNullOrEmpty()
 
-            override fun loadFromDb(): LiveData<Source> {
-                return sourcesDao.getSourcesById(source.id)
-            }
+            override fun loadFromDb(): LiveData<Source> = sourcesDao.getSourcesById(source.id)
 
-            override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<SourceLogoInfo>> {
-                return logoService.getSourceLogo(source.url.toString())
-            }
+            override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<SourceLogoInfo>> =
+                    logoService.getSourceLogo(source.url.toString())
 
         }
 

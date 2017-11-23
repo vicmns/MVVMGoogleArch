@@ -115,16 +115,19 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
             if (resources != null) {
                 when (resources.status) {
                     Status.SUCCESS -> {
+                        sourcesViewModel.sourcesLiveData.removeObservers(this)
                         setDataToAdapters(resources.data)
                         hideLoadingIndicator()
                     }
                     Status.ERROR -> {
+                        sourcesViewModel.sourcesLiveData.removeObservers(this)
                         hideLoadingIndicator()
                     }
                     Status.LOADING -> {
                         showLoadingIndicator()
                     }
                     Status.CANCEL -> {
+                        sourcesViewModel.sourcesLiveData.removeObservers(this)
                         hideLoadingIndicator()
                     }
                 }
