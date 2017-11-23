@@ -27,10 +27,7 @@ class AbsentLiveData<T> private constructor() : LiveData<T>() {
     }
 
     companion object {
-        fun <T> create(): LiveData<T> {
-
-            return AbsentLiveData()
-        }
+        fun <T> create(): LiveData<T> = AbsentLiveData()
     }
 }
 
