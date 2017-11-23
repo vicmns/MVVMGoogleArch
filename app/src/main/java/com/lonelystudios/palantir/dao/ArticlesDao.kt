@@ -1,10 +1,7 @@
 package com.lonelystudios.palantir.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import com.lonelystudios.palantir.vo.sources.Article
 import com.lonelystudios.palantir.vo.sources.Articles
 
@@ -32,10 +29,10 @@ abstract class ArticlesDao {
     @Query("DELETE FROM Article WHERE articlesId = :articlesId")
     abstract fun deleteAllArticlesItemsById(articlesId: Long)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertArticlesItem(articles: Articles)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertArticleListItems(listOfArticles: List<Article>)
 
     @Update
