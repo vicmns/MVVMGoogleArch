@@ -4,7 +4,6 @@ package com.lonelystudios.palantir.net
  * Created by vicmns on 10/19/17.
  */
 
-import android.arch.lifecycle.LiveData
 import com.lonelystudios.palantir.net.utils.ApiResponse
 import com.lonelystudios.palantir.net.utils.CancelableRetrofitLiveDataCall
 import com.lonelystudios.palantir.vo.SortBy
@@ -31,9 +30,11 @@ interface NewsService {
                                   @Query("language") language: String,
                                   @Query("country") country: String): CancelableRetrofitLiveDataCall<ApiResponse<Sources>>
 
-    fun getArticlesBySource(@Query("source") source: String): CancelableRetrofitLiveDataCall<ApiResponse<Articles>>
+    @GET("top-headlines")
+    fun getArticlesBySource(@Query("sources") sources: String): CancelableRetrofitLiveDataCall<ApiResponse<Articles>>
 
-    fun getArticlesBySourceSortedBy(@Query("source") source: String,
+    @GET("top-headlines")
+    fun getArticlesBySourceSortedBy(@Query("sources") source: String,
                                     @Query("sortBy") @SortBy.Companion.Sort sortBy: String):
             CancelableRetrofitLiveDataCall<ApiResponse<Articles>>
 }
