@@ -12,8 +12,11 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+
 
 /**
  * Created by vicmns on 8/3/17.
@@ -43,11 +46,13 @@ class NetModule {
         client.addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
-                    .header("X-Authorization", Constants.API_KEY)
+                    .header("Authorization", "Bearer " + Constants.API_KEY)
             val request = requestBuilder.build()
             chain.proceed(request)
         }
-
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        client.addInterceptor(interceptor)
         return client.build()
     }
 
@@ -55,7 +60,8 @@ class NetModule {
     @PerApp
     fun providesNewsService(okHttpClient: OkHttpClient): NewsService {
         return Retrofit.Builder()
-                .baseUrl("https://newsapi.org/v1/")
+                .client(okHttpClient)
+                .baseUrl("https://newsapi.org/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .build()
@@ -66,6 +72,7 @@ class NetModule {
     @PerApp
     fun providesLogoService(okHttpClient: OkHttpClient): LogoService {
         return Retrofit.Builder()
+                .client(okHttpClient)
                 .baseUrl("http://icons.better-idea.org")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
