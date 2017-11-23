@@ -1,6 +1,7 @@
 package com.lonelystudios.palantir.utils
 
 import android.databinding.BindingAdapter
+import android.databinding.BindingConversion
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.FrameLayout
@@ -12,9 +13,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.vo.sources.Source
-import android.databinding.BindingConversion
-
-
 
 
 /**
@@ -51,6 +49,17 @@ object DataBindingAdapters {
                 }).placeholder(R.drawable.placeholder).into(imageView)
             }
             progressBar.visibility = View.GONE
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:articleImageUrl")
+    fun setArticleImage(imageView: ImageView?, imageUrl: String?) {
+        imageView?.let { cImageView ->
+            imageUrl?.let { cArticle ->
+                GlideApp.with(cImageView.context).load(cArticle)
+                        .placeholder(R.drawable.placeholder).into(cImageView)
+            }
         }
     }
 

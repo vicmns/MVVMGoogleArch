@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * Created by vicmns on 10/19/17.
  */
-class PalantirApp : Application(), HasActivityInjector {
+open class PalantirApp : Application(), HasActivityInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 

@@ -4,6 +4,7 @@ import android.app.Application
 import com.lonelystudios.palantir.PalantirApp
 import com.lonelystudios.palantir.di.scope.PerApp
 import com.lonelystudios.palantir.di.ui.main.MainActivityModule
+import com.lonelystudios.palantir.di.ui.news.NewsActivityModule
 import com.lonelystudios.palantir.di.ui.sources.SourcesActivityModule
 import dagger.BindsInstance
 import dagger.Component
@@ -16,7 +17,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 @PerApp
 @Component(modules = arrayOf(AndroidSupportInjectionModule::class,
         AppModule::class, MainActivityModule::class,
-        SourcesActivityModule::class))
+        SourcesActivityModule::class, NewsActivityModule::class))
 interface AppComponent {
 
     @Component.Builder

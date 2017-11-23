@@ -18,13 +18,14 @@ package com.lonelystudios.palantir.di
 
 
 import com.lonelystudios.palantir.di.scope.PerFragment
+import com.lonelystudios.palantir.ui.news.AllNewsFragment
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class FragmentBuildersModule {
-    /*@PerFragment
+    @PerFragment
     @ContributesAndroidInjector
-    abstract InviteUsersFragment contributeInviteUsersFragment();*/
+    abstract fun contributeAllNewsFragment() : AllNewsFragment
 }

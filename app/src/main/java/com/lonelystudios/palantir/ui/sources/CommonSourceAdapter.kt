@@ -117,9 +117,9 @@ abstract class CommonSourceAdapter<T : CommonSourceAdapter<T>.SourcesViewHolder>
         override fun onClick(view: View) {
             val source = sourcesList[adapterPosition]
             source.isUserSelected = !source.isUserSelected
-            //activity.onCardClicked(adapterPosition, source)
             if(source.isUserSelected) notifyItemChanged(adapterPosition, ACTION_ADD_SOURCE)
             else notifyItemChanged(adapterPosition, ACTION_REMOVE_SOURCE)
+            activity.onCardClicked(adapterPosition, source)
         }
     }
 
