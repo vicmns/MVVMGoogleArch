@@ -3,6 +3,7 @@ package com.lonelystudios.palantir.di
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.lonelystudios.palantir.BuildConfig
 import com.lonelystudios.palantir.di.scope.PerApp
 import com.lonelystudios.palantir.net.LogoService
 import com.lonelystudios.palantir.net.NewsService
@@ -46,7 +47,7 @@ class NetModule {
         client.addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
-                    .header("Authorization", "Bearer " + Constants.API_KEY)
+                    .header("Authorization", "Bearer " + BuildConfig.NEWS_API_API_KEY)
             val request = requestBuilder.build()
             chain.proceed(request)
         }
