@@ -7,7 +7,6 @@ import com.lonelystudios.palantir.BuildConfig
 import com.lonelystudios.palantir.di.scope.PerApp
 import com.lonelystudios.palantir.net.LogoService
 import com.lonelystudios.palantir.net.NewsService
-import com.lonelystudios.palantir.net.utils.Constants
 import com.lonelystudios.palantir.net.utils.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -16,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 
 /**
