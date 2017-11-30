@@ -6,4 +6,7 @@
     <string name="title_activity_news">NewsActivity</string>
     <string name="title_news_home">Home</string>
     <string name="title_news_dashboard">Dashboard</string>
+
+
+    <string name="fab_scrolling_view_behavior" translatable="false">com.lonelystudios.palantir.utils.ScrollAwareFABBehavior</string>
 </resources>

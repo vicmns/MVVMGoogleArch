@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/listSwipeRefresh"
         android:layout_width="match_parent"

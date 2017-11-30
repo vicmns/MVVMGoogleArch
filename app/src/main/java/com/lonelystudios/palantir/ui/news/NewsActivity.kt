@@ -1,29 +1,28 @@
 package com.lonelystudios.palantir.ui.news
 
+import android.app.Activity
+import android.content.ComponentName
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsClient
+import android.support.customtabs.CustomTabsIntent
+import android.support.customtabs.CustomTabsServiceConnection
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.databinding.ActivityNewsBinding
+import com.lonelystudios.palantir.utils.customtabs.CustomTabsHelper
 import com.lonelystudios.palantir.vo.sources.Article
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_news.*
 import javax.inject.Inject
-import android.support.customtabs.CustomTabsIntent
-import android.content.ComponentName
-import android.support.customtabs.CustomTabsClient
-import android.support.customtabs.CustomTabsServiceConnection
-import android.app.Activity
-import com.lonelystudios.palantir.utils.customtabs.CustomTabsHelper
-import android.content.Intent
-
-
 
 
 class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFragment.OnNewsItemInteraction {
@@ -98,8 +97,9 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFra
 
     override fun onListFragmentInteraction(item: Article) {
         val builder = CustomTabsIntent.Builder()
-        builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
-        builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
+        //builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
+        //builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
         openCustomTab(this, builder.build(), Uri.parse(item.url))
     }
 

@@ -35,12 +35,21 @@
             android:paddingBottom="?actionBarSize"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addSourcesFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="normal"
+            android:src="@drawable/ic_add_black_24dp"
+            android:tint="@android:color/white"
+            app:layout_anchorGravity="bottom"
+            android:layout_gravity="bottom|end"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_behavior="@string/fab_scrolling_view_behavior"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_navigation_bar_bottom_margin"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
@@ -51,7 +60,6 @@
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
             app:menu="@menu/news_navigation"/>
-
 
     </android.support.design.widget.CoordinatorLayout>
 
