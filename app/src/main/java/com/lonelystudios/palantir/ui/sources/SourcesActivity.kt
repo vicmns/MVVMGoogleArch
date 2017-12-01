@@ -1,8 +1,10 @@
 package com.lonelystudios.palantir.ui.sources
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -39,6 +41,7 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
     private lateinit var listItemsAnimator: LayoutAnimationController
 
     private var isGridMode = true
+    private var hasSourcesChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,6 +191,18 @@ class SourcesActivity : AppCompatActivity(), CommonSourceAdapter.AdapterHandlers
 
     override fun onCardClicked(position: Int, source: Source) {
         sourcesViewModel.updateSelectedSource(source)
+        hasSourcesChanged = true
         Timber.d("Item clicked: %d", position)
+    }
+
+    override fun finish() {
+        val resultIntent = Intent()
+        resultIntent.putExtra(UPDATE_NEWS_RESPONSE_BUNDLE, hasSourcesChanged)
+        setResult(Activity.RESULT_OK, resultIntent)
+        super.finish()
+    }
+
+    companion object {
+        val UPDATE_NEWS_RESPONSE_BUNDLE = "update_news_response_bundle"
     }
 }

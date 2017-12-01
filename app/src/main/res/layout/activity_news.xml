@@ -5,6 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.lonelystudios.palantir.ui.news.NewsActivity">
 
+    <data>
+        <variable
+            name="handler"
+            type="com.lonelystudios.palantir.ui.news.NewsActivity.NewsActivityHandlers"/>
+    </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -47,6 +53,7 @@
             android:clickable="true"
             android:focusable="true"
             app:layout_behavior="@string/fab_scrolling_view_behavior"
+            android:onClick="@{() -> handler.onOpenSourcesClick()}"
             android:layout_marginStart="@dimen/fab_margin"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_navigation_bar_bottom_margin"/>

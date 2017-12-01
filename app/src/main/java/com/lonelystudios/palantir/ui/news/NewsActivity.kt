@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.databinding.ActivityNewsBinding
+import com.lonelystudios.palantir.ui.sources.SourcesActivity
 import com.lonelystudios.palantir.utils.customtabs.CustomTabsHelper
 import com.lonelystudios.palantir.vo.sources.Article
 import dagger.android.AndroidInjector
@@ -25,7 +26,8 @@ import kotlinx.android.synthetic.main.activity_news.*
 import javax.inject.Inject
 
 
-class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFragment.OnNewsItemInteraction {
+class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
+        AllNewsFragment.OnNewsItemInteraction {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
@@ -33,6 +35,12 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFra
     lateinit var fragmentManager: FragmentManager
     lateinit var binding: ActivityNewsBinding
     private var customTabsClient: CustomTabsClient? = null
+    private val handler = object : NewsActivityHandlers {
+        override fun onOpenSourcesClick() {
+            val intent = Intent(this@NewsActivity, SourcesActivity::class.java)
+            startActivityForResult(intent, UPDATE_NEWS_REQUEST_CODE)
+        }
+    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -62,15 +70,14 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFra
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_news)
-
+        binding.handler = handler
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         setAllNewsFragment()
-
     }
 
     private fun setAllNewsFragment() {
         var currentFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
-        if(currentFragment == null) {
+        if (currentFragment == null) {
             currentFragment = AllNewsFragment.newInstance(1)
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.add(binding.fragmentContainer.id, currentFragment, AllNewsFragment.TAG)
@@ -124,5 +131,29 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector, AllNewsFra
         activity.startActivity(intent)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.takeIf { it.getBooleanExtra(SourcesActivity.UPDATE_NEWS_RESPONSE_BUNDLE, false) }.apply {
+                refreshNewsItems()
+            }
+        }
+    }
+
+    private fun refreshNewsItems() {
+        val currentFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
+        if(currentFragment is AllNewsFragment) {
+            currentFragment.updateNewsList()
+        }
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
+
+    interface NewsActivityHandlers {
+        fun onOpenSourcesClick()
+    }
+
+    companion object {
+        val UPDATE_NEWS_REQUEST_CODE = "UPDATE_NEWS_REQUEST_CODE".hashCode().and(0x0f)
+    }
 }
