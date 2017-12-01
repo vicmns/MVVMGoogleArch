@@ -1,6 +1,8 @@
 package com.lonelystudios.palantir.ui.news
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ComponentName
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -19,6 +21,7 @@ import com.lonelystudios.palantir.databinding.ActivityNewsBinding
 import com.lonelystudios.palantir.ui.sources.SourcesActivity
 import com.lonelystudios.palantir.utils.customtabs.CustomTabsHelper
 import com.lonelystudios.palantir.vo.sources.Article
+import com.lonelystudios.palantir.vo.sources.Source
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -27,13 +30,16 @@ import javax.inject.Inject
 
 
 class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
-        AllNewsFragment.OnNewsItemInteraction {
+        AllNewsFragment.OnNewsItemInteraction, NewsDashboardFragment.OnNewsDashboardFragmentInteractionListener {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
     @Inject
     lateinit var fragmentManager: FragmentManager
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var binding: ActivityNewsBinding
+    private lateinit var viewModel: NewsActivityViewModel
     private var customTabsClient: CustomTabsClient? = null
     private val handler = object : NewsActivityHandlers {
         override fun onOpenSourcesClick() {
@@ -49,7 +55,7 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-
+                setNewsDashboard()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -69,6 +75,7 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewsActivityViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_news)
         binding.handler = handler
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -76,20 +83,31 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     private fun setAllNewsFragment() {
-        var currentFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
-        if (currentFragment == null) {
-            currentFragment = AllNewsFragment.newInstance(1)
+        var fragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
+        viewModel.currentFragment = AllNewsFragment.TAG
+        if (fragment == null) {
+            fragment = AllNewsFragment.newInstance(1)
             val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.add(binding.fragmentContainer.id, currentFragment, AllNewsFragment.TAG)
+            fragmentTransaction.add(binding.fragmentContainer.id, fragment, AllNewsFragment.TAG)
             //fragmentTransaction.addToBackStack(AllNewsFragment.TAG)
             fragmentTransaction.commit()
         } else {
-            showFragment(currentFragment)
+            showFragment(fragment)
         }
     }
 
-    fun setNewsDashboard() {
-
+    private fun setNewsDashboard() {
+        var fragment = fragmentManager.findFragmentByTag(NewsDashboardFragment.TAG)
+        viewModel.currentFragment = NewsDashboardFragment.TAG
+        if (fragment == null) {
+            fragment = NewsDashboardFragment.newInstance()
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.add(binding.fragmentContainer.id, fragment, NewsDashboardFragment.TAG)
+            fragmentTransaction.commit()
+            showFragment(fragment)
+        } else {
+            showFragment(fragment)
+        }
     }
 
     private fun showFragment(fragment: Fragment) {
@@ -142,9 +160,26 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     private fun refreshNewsItems() {
         val currentFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
-        if(currentFragment is AllNewsFragment) {
+        if (currentFragment is AllNewsFragment) {
             currentFragment.updateNewsList()
         }
+    }
+
+    override fun onBackPressed() {
+        when (viewModel.currentFragment) {
+            NewsDashboardFragment.TAG -> {
+                val allNewsFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
+                if(allNewsFragment != null) showFragment(allNewsFragment)
+                navigation.selectedItemId = R.id.navigation_home
+            }
+            else -> {
+                super.onBackPressed()
+            }
+        }
+    }
+
+    override fun onSourceSelected(sources: Source) {
+
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
