@@ -1,8 +1,11 @@
 package com.lonelystudios.palantir.utils
 
+import android.content.res.TypedArray
 import android.databinding.BindingAdapter
 import android.databinding.BindingConversion
+import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -13,6 +16,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.vo.sources.Source
+import android.view.ViewGroup
+
+
 
 
 /**
@@ -65,7 +71,25 @@ object DataBindingAdapters {
 
     @JvmStatic
     @BindingConversion
-    fun convertBooleanToVisibility(visible: Boolean): Int {
-        return if (visible) View.VISIBLE else View.INVISIBLE
+    fun convertBooleanToVisibility(visible: Boolean): Int =
+            if (visible) View.VISIBLE else View.INVISIBLE
+
+    @JvmStatic
+    @BindingAdapter("android:layout_marginBottom")
+    fun setBottomMargin(view: View, bottomMargin: Float) {
+        val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin,
+                layoutParams.rightMargin, bottomMargin.toInt())
+        view.layoutParams = layoutParams
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:setColorScheme")
+    fun setColorScheme(swipeRefreshLayout: SwipeRefreshLayout, typedArray: TypedArray) {
+        val colors = IntArray(typedArray.length())
+        for (i in 0 until typedArray.length()) {
+            colors[i] = typedArray.getColor(i, Color.BLACK)
+        }
+        swipeRefreshLayout.setColorSchemeColors(*colors)
     }
 }

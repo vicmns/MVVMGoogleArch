@@ -7,4 +7,17 @@
 
     <color name="adapter_source_bottom_view_background">#DDFFFFFF</color>
     <color name="adapter_source_selection_background">#AA000000</color>
+
+    <!-- Swipe To Refresh Color Scheme -->
+    <color name="swipe_to_refresh_color_1">#2196F3</color>
+    <color name="swipe_to_refresh_color_2">#F44336</color>
+    <color name="swipe_to_refresh_color_3">#009688</color>
+    <color name="swipe_to_refresh_color_4">#FF9800</color>
+
+    <array name="swipe_to_refresh_colors">
+        <item>@color/swipe_to_refresh_color_1</item>
+        <item>@color/swipe_to_refresh_color_2</item>
+        <item>@color/swipe_to_refresh_color_3</item>
+        <item>@color/swipe_to_refresh_color_4</item>
+    </array>
 </resources>
