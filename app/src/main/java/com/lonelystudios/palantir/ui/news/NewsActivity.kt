@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsClient
 import android.support.customtabs.CustomTabsIntent
 import android.support.customtabs.CustomTabsServiceConnection
+import android.support.customtabs.CustomTabsSession
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -39,6 +40,7 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var binding: ActivityNewsBinding
+    var customTabsSession: CustomTabsSession? = null
     private lateinit var viewModel: NewsActivityViewModel
     private var customTabsClient: CustomTabsClient? = null
     private val handler = object : NewsActivityHandlers {
@@ -68,14 +70,16 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
         false
     }
 
-    var connection: CustomTabsServiceConnection = object : CustomTabsServiceConnection() {
+    private val connection: CustomTabsServiceConnection = object : CustomTabsServiceConnection() {
         override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
             customTabsClient = client
             customTabsClient?.warmup(0L)
+            customTabsSession = customTabsClient?.newSession(null)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             customTabsClient = null
+            customTabsSession = null
         }
     }
 
@@ -88,6 +92,8 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
         setSupportActionBar(binding.toolbar)
         attachListeners()
         setFragment()
+        val packageName = CustomTabsHelper.getPackageNameToUse(this)
+        CustomTabsClient.bindCustomTabsService(this, packageName, connection)
     }
 
     private fun attachListeners() {
@@ -149,7 +155,7 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     override fun onListFragmentInteraction(item: Article) {
-        val builder = CustomTabsIntent.Builder()
+        val builder = CustomTabsIntent.Builder(customTabsSession)
         //builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
         //builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
         builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
