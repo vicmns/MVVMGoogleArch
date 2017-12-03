@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="source"
+            type="com.lonelystudios.palantir.vo.sources.Source"/>
+
+        <variable
+            name="handlers"
+            type="com.lonelystudios.palantir.ui.news.NewsDashboardSourcesAdapter.HolderHandlers"/>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{(v) -> handlers.onClick(v)}"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/sourceLogo"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:source="@{source}">
+
+            <ImageView
+                android:id="@+id/sourceLogoImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"/>
+
+            <ProgressBar
+                android:id="@+id/sourceLogoProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/sourceName"
+            style="@style/Base.TextAppearance.AppCompat.Body2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@{source.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sourceLogo"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/sourceDescription"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:lines="3"
+            android:maxLines="3"
+            android:padding="5dp"
+            android:text="@{source.description}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sourceLogo"
+            app:layout_constraintTop_toBottomOf="@+id/sourceName"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

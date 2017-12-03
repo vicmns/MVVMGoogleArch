@@ -3,9 +3,7 @@ package com.lonelystudios.palantir.di.viewmodel
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.lonelystudios.palantir.ui.SourceItemViewModel
-import com.lonelystudios.palantir.ui.news.AllNewsFragmentViewModel
-import com.lonelystudios.palantir.ui.news.NewsActivity
-import com.lonelystudios.palantir.ui.news.NewsActivityViewModel
+import com.lonelystudios.palantir.ui.news.*
 import com.lonelystudios.palantir.ui.sources.SourcesViewModel
 
 import dagger.Binds
@@ -34,6 +32,19 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AllNewsFragmentViewModel::class)
     abstract fun bindNewsFragmentViewModel(newsFragmentViewModel: AllNewsFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewsDashboardFragmentViewModel::class)
+    abstract fun bindNewsDashboardFragmentViewModel(newsDashboardFragmentViewModel:
+                                                    NewsDashboardFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewsDashboardNewsBySourceFragmentViewModel::class)
+    abstract fun bindNewsDashboardnewsDashboardNewsBySourceFragmentViewModel(
+            newsDashboardNewsBySourceFragmentViewModel:
+            NewsDashboardNewsBySourceFragmentViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PalantirViewModelFactory): ViewModelProvider.Factory

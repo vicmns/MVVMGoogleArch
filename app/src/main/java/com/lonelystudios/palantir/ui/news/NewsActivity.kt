@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 
 class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
-        AllNewsFragment.OnNewsItemInteraction, NewsDashboardFragment.OnNewsDashboardFragmentInteractionListener {
+        OnNewsItemInteraction, NewsDashboardFragment.OnNewsDashboardFragmentInteractionListener {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
@@ -55,7 +55,13 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                setNewsDashboard()
+                if(fragmentManager.backStackEntryCount > 0) {
+                    showNewsBySourceFragment()
+                }
+                else {
+
+                    setNewsDashboard()
+                }
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -75,39 +81,61 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewsActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(NewsActivityViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_news)
         binding.handler = handler
+        setSupportActionBar(binding.toolbar)
+        attachListeners()
+        setFragment()
+    }
+
+    private fun attachListeners() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        setAllNewsFragment()
+        fragmentManager.addOnBackStackChangedListener {
+            val count = fragmentManager.backStackEntryCount
+            if(count == 0) {
+                when(viewModel.currentFragment) {
+                    NewsDashboardNewsBySourceFragment.TAG ->
+                        setNewsDashboard()
+                }
+            }
+        }
+    }
+
+    private fun setFragment() {
+        when(viewModel.currentFragment) {
+            AllNewsFragment.TAG -> setAllNewsFragment()
+            NewsDashboardFragment.TAG -> setNewsDashboard()
+            NewsDashboardNewsBySourceFragment.TAG -> showNewsBySourceFragment()
+        }
     }
 
     private fun setAllNewsFragment() {
         var fragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
         viewModel.currentFragment = AllNewsFragment.TAG
+        binding.toolbar.setTitle(R.string.app_name)
         if (fragment == null) {
             fragment = AllNewsFragment.newInstance(1)
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.add(binding.fragmentContainer.id, fragment, AllNewsFragment.TAG)
-            //fragmentTransaction.addToBackStack(AllNewsFragment.TAG)
             fragmentTransaction.commit()
         } else {
-            showFragment(fragment)
         }
+        showFragment(fragment)
     }
 
     private fun setNewsDashboard() {
         var fragment = fragmentManager.findFragmentByTag(NewsDashboardFragment.TAG)
         viewModel.currentFragment = NewsDashboardFragment.TAG
+        binding.toolbar.setTitle(R.string.app_name)
         if (fragment == null) {
             fragment = NewsDashboardFragment.newInstance()
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.add(binding.fragmentContainer.id, fragment, NewsDashboardFragment.TAG)
             fragmentTransaction.commit()
-            showFragment(fragment)
-        } else {
-            showFragment(fragment)
         }
+        showFragment(fragment)
     }
 
     private fun showFragment(fragment: Fragment) {
@@ -152,25 +180,41 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            data?.takeIf { it.getBooleanExtra(SourcesActivity.UPDATE_NEWS_RESPONSE_BUNDLE, false) }.apply {
-                refreshNewsItems()
+            data?.takeIf { it.getBooleanExtra(SourcesActivity.UPDATE_NEWS_RESPONSE_BUNDLE, false) }?.apply {
+                refreshFragments()
             }
         }
     }
 
-    private fun refreshNewsItems() {
-        val currentFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
-        if (currentFragment is AllNewsFragment) {
-            currentFragment.updateNewsList()
+    private fun refreshFragments() {
+        val currentFragment = fragmentManager.findFragmentByTag(NewsDashboardNewsBySourceFragment.TAG)
+        if(currentFragment != null) {
+            fragmentManager.popBackStack()
+        }
+        for (cFragment in fragmentManager.fragments) {
+            when(cFragment) {
+                is AllNewsFragment -> {cFragment.updateNewsList()}
+                is NewsDashboardFragment -> {
+                    cFragment.updateUserSources()
+                }
+            }
         }
     }
 
     override fun onBackPressed() {
         when (viewModel.currentFragment) {
             NewsDashboardFragment.TAG -> {
-                val allNewsFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
-                if(allNewsFragment != null) showFragment(allNewsFragment)
-                navigation.selectedItemId = R.id.navigation_home
+                if(fragmentManager.backStackEntryCount > 0) {
+                    super.onBackPressed()
+                }
+                else {
+                    val allNewsFragment = fragmentManager.findFragmentByTag(AllNewsFragment.TAG)
+                    if(allNewsFragment != null) showFragment(allNewsFragment)
+                    navigation.selectedItemId = R.id.navigation_home
+                }
+            }
+            AllNewsFragment.TAG -> {
+                finish()
             }
             else -> {
                 super.onBackPressed()
@@ -179,7 +223,31 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     override fun onSourceSelected(sources: Source) {
+        showNewsBySource(sources)
+    }
 
+    private fun showNewsBySource(source: Source) {
+        var fragment = fragmentManager.findFragmentByTag(NewsDashboardNewsBySourceFragment.TAG)
+        viewModel.currentFragment = NewsDashboardNewsBySourceFragment.TAG
+        if (fragment == null) {
+            fragment = NewsDashboardNewsBySourceFragment.newInstance(source)
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.add(binding.fragmentContainer.id, fragment, NewsDashboardNewsBySourceFragment.TAG)
+            fragmentTransaction.addToBackStack(NewsDashboardNewsBySourceFragment.TAG)
+            fragmentTransaction.commit()
+            showFragment(fragment)
+        } else {
+            showFragment(fragment)
+        }
+    }
+
+    private fun showNewsBySourceFragment() {
+        val fragment = fragmentManager.findFragmentByTag(NewsDashboardNewsBySourceFragment.TAG)
+        viewModel.currentFragment = NewsDashboardNewsBySourceFragment.TAG
+        if(fragment != null) {
+            (fragment as NewsDashboardNewsBySourceFragment).setToolbarTitle()
+            showFragment(fragment)
+        }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector

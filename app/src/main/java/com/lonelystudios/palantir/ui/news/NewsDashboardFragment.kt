@@ -1,15 +1,21 @@
 package com.lonelystudios.palantir.ui.news
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.net.Uri
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.lonelystudios.palantir.R
+import com.lonelystudios.palantir.databinding.FragmentNewsSourcesBinding
+import com.lonelystudios.palantir.di.Injectable
 import com.lonelystudios.palantir.vo.sources.Source
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -19,31 +25,74 @@ import com.lonelystudios.palantir.vo.sources.Source
  * Use the [NewsDashboardFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NewsDashboardFragment : Fragment() {
-
-    private var mListener: OnNewsDashboardFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+class NewsDashboardFragment : Fragment(), Injectable, NewsDashboardSourcesAdapter.AdapterHandlers {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var fragmentViewModel: NewsDashboardFragmentViewModel
+    private lateinit var binding: FragmentNewsSourcesBinding
+    private lateinit var adapter: NewsDashboardSourcesAdapter
+    private var listener: OnNewsDashboardFragmentInteractionListener? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_news_sources, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_news_sources, container, false)
+        fragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewsDashboardFragmentViewModel::class.java)
+        initList()
+        return binding.root
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            //mListener!!.onSourceSelected(uri)
+    private fun initList() {
+        adapter = NewsDashboardSourcesAdapter(activity, viewModelFactory, this)
+        binding.newsSourcesList.layoutManager = LinearLayoutManager(context)
+        binding.newsSourcesList.adapter = adapter
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        attachObservers()
+        attachListeners()
+        updateSources()
+        getUserSources()
+    }
+
+    private fun attachObservers() {
+        fragmentViewModel.sourcesLiveData.observe(this, Observer { sources ->
+            sources?.takeIf { it.isNotEmpty() }?.apply {
+                fragmentViewModel.sources = sources
+                updateSources()
+                hideProgressIndicator()
+            }
+        })
+    }
+
+    private fun attachListeners() {
+        binding.listSwipeRefresh.setOnRefreshListener {
+            getUserSources()
         }
+    }
+
+    private fun updateSources() {
+        adapter.sourcesList = fragmentViewModel.sources.toMutableList()
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun getUserSources() {
+        showProgressIndicator()
+        fragmentViewModel.getSelectedSources()
+    }
+
+    private fun showProgressIndicator() {
+        binding.listSwipeRefresh.isRefreshing =  true
+    }
+
+    private fun hideProgressIndicator() {
+        binding.listSwipeRefresh.isRefreshing =  false
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnNewsDashboardFragmentInteractionListener) {
-            mListener = context
+            listener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnNewsDashboardFragmentInteractionListener")
         }
@@ -51,18 +100,19 @@ class NewsDashboardFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
+    override fun onCardClicked(position: Int, source: Source) {
+        listener?.onSourceSelected(source)
+    }
+
+    fun updateUserSources() {
+        showProgressIndicator()
+        getUserSources()
+    }
+
+
     interface OnNewsDashboardFragmentInteractionListener {
         fun onSourceSelected(sources: Source)
     }
@@ -74,4 +124,4 @@ class NewsDashboardFragment : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}

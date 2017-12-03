@@ -8,5 +8,5 @@ import javax.inject.Inject
  */
 
 class NewsActivityViewModel @Inject constructor(): ViewModel() {
-    var currentFragment: String = ""
+    var currentFragment: String = AllNewsFragment.TAG
 }

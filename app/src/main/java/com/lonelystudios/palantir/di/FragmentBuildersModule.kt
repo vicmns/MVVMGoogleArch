@@ -19,6 +19,8 @@ package com.lonelystudios.palantir.di
 
 import com.lonelystudios.palantir.di.scope.PerFragment
 import com.lonelystudios.palantir.ui.news.AllNewsFragment
+import com.lonelystudios.palantir.ui.news.NewsDashboardFragment
+import com.lonelystudios.palantir.ui.news.NewsDashboardNewsBySourceFragment
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -28,4 +30,12 @@ abstract class FragmentBuildersModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun contributeAllNewsFragment() : AllNewsFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun contributeNewsDashboardFragment() : NewsDashboardFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun contributeNewsDashboardNewsBySourceFragment(): NewsDashboardNewsBySourceFragment
 }

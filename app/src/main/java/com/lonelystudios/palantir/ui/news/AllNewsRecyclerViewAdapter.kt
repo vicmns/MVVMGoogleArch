@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.lonelystudios.palantir.databinding.FragmentAllNewsItemBinding
-import com.lonelystudios.palantir.ui.news.AllNewsFragment.OnNewsItemInteraction
 import com.lonelystudios.palantir.vo.sources.Article
 
 /**
