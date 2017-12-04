@@ -15,6 +15,7 @@ import com.lonelystudios.palantir.R
 import com.lonelystudios.palantir.databinding.FragmentNewsSourcesBinding
 import com.lonelystudios.palantir.di.Injectable
 import com.lonelystudios.palantir.vo.sources.Source
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -57,10 +58,18 @@ class NewsDashboardFragment : Fragment(), Injectable, NewsDashboardSourcesAdapte
 
     private fun attachObservers() {
         fragmentViewModel.sourcesLiveData.observe(this, Observer { sources ->
-            sources?.takeIf { it.isNotEmpty() }?.apply {
+            if(sources != null && sources.isNotEmpty()) {
                 fragmentViewModel.sources = sources
                 updateSources()
                 hideProgressIndicator()
+                if(binding.progressLayout.isEmpty) {
+                    binding.progressLayout.showContent()
+                }
+            } else {
+                hideProgressIndicator()
+                binding.progressLayout.showEmpty(R.drawable.ic_view_list_black_24dp,
+                        "No news to show",
+                        "There's no selected sources to pull news, please add new sources using the FAB icon.")
             }
         })
     }

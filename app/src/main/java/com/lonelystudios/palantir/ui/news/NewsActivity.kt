@@ -186,7 +186,7 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            data?.takeIf { it.getBooleanExtra(SourcesActivity.UPDATE_NEWS_RESPONSE_BUNDLE, false) }?.apply {
+            if(data?.getBooleanExtra(SourcesActivity.UPDATE_NEWS_RESPONSE_BUNDLE, false) == true) {
                 refreshFragments()
             }
         }
@@ -254,6 +254,11 @@ class NewsActivity : AppCompatActivity(), HasSupportFragmentInjector,
             (fragment as NewsDashboardNewsBySourceFragment).setToolbarTitle()
             showFragment(fragment)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(connection)
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector

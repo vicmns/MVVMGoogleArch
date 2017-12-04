@@ -34,6 +34,14 @@ interface BaseDao<T> {
     fun update(obj: T)
 
     /**
+     * Update an array of objects in the database.
+     *
+     * @param arrObj the objects to be inserted.
+     */
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(vararg arrObj: T)
+
+    /**
      * Delete an object from the database
      *
      * @param obj the object to be deleted

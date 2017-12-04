@@ -28,12 +28,21 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
     fun getAllSources(): LiveData<Resource<List<Source>>> {
         //if (sourcesResource != null) sourcesResource.cancelServiceCall()
         sourcesResource = object : CancelableNetworkBoundResource<List<Source>, Sources>(appExecutors) {
+            var isUpdate = false
+
             override fun saveCallResult(item: Sources) {
                 val sourceList = item.sources
-                sourcesDao.insert(*sourceList.toTypedArray())
+                if(isUpdate) {
+                    sourcesDao.update(*sourceList.toTypedArray())
+                } else {
+                    sourcesDao.insert(*sourceList.toTypedArray())
+                }
             }
 
-            override fun shouldFetch(data: List<Source>?): Boolean = data?.isEmpty() ?: false
+            override fun shouldFetch(data: List<Source>?): Boolean {
+                isUpdate = data?.isEmpty() ?: false
+                return data?.isEmpty() ?: false
+            }
 
             override fun loadFromDb(): LiveData<List<Source>> = sourcesDao.getSources()
 

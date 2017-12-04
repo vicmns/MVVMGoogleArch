@@ -3,21 +3,32 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/listSwipeRefresh"
-        app:setColorScheme="@{@typedArray/swipe_to_refresh_colors}"
+    <com.vlonjatg.progressactivity.ProgressRelativeLayout
+        android:id="@+id/progressLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:loadingBackgroundColor="#FFFFFF"
+        app:emptyBackgroundColor="@color/colorPrimaryLight"
+        app:errorBackgroundColor="#42a5f5">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:name="com.lonelystudios.palantir.ui.news.AllNewsFragment"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/listSwipeRefresh"
+            app:setColorScheme="@{@typedArray/swipe_to_refresh_colors}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.lonelystudios.palantir.ui.news.AllNewsFragment"
-            tools:listitem="@layout/fragment_all_news_item"/>
+            android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:name="com.lonelystudios.palantir.ui.news.AllNewsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.lonelystudios.palantir.ui.news.AllNewsFragment"
+                tools:listitem="@layout/fragment_all_news_item"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </com.vlonjatg.progressactivity.ProgressRelativeLayout>
+
 
 </layout>

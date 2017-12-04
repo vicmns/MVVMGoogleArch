@@ -81,8 +81,15 @@ class AllNewsFragment : Fragment(), Injectable {
                 if(it.isNotEmpty()) {
                     fragmentViewModel.userSources = it
                     getAllArticlesBySources(it)
+                    if(binding.progressLayout.isEmpty) {
+                        binding.progressLayout.showContent()
+                    }
+                } else {
+                    binding.progressLayout.showEmpty(R.drawable.ic_view_list_black_24dp,
+                            "No news to show",
+                            "There's no selected sources to pull news, please add new sources using the FAB icon.")
+                    hideLoadingIndicator()
                 }
-                else hideLoadingIndicator()
             }
         })
 
