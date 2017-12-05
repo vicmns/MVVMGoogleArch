@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import android.support.annotation.StringDef
 import com.google.gson.annotations.SerializedName
 import com.lonelystudios.palantir.vo.SortBy
 import javax.annotation.Generated
@@ -80,5 +81,21 @@ data class Source(
                         override fun createFromParcel(source: Parcel): Source = Source(source)
                         override fun newArray(size: Int): Array<Source?> = arrayOfNulls(size)
                 }
+
+                const val ALL = ""
+                const val BUSINESS = "business"
+                const val ENTERTAINMENT = "entertainment"
+                const val GAMING = "gaming"
+                const val GENERAL = "general"
+                const val HEALTH_AND_MEDICAL = "health-and-medical"
+                const val MUSIC = "music"
+                const val SCIENCE_AND_NATURE = "science-and-nature"
+                const val SPORT = "sport"
+                const val TECHNOLOGY = "technology"
         }
+
+        @StringDef(ALL, BUSINESS, ENTERTAINMENT, GAMING, GENERAL, HEALTH_AND_MEDICAL, MUSIC,
+                SCIENCE_AND_NATURE, SPORT, TECHNOLOGY)
+        @Retention(AnnotationRetention.SOURCE)
+        annotation class Category
 }
