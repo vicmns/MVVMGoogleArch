@@ -37,6 +37,10 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'NEWS_API_API_KEY', keystoreProperties['NewsApiApiKey']
     }
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
 }
 
 dependencies {
@@ -71,6 +75,16 @@ dependencies {
     implementation "com.github.vlonjatg:progress-activity:v2.0.3"
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
     testImplementation 'junit:junit:4.12'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver"
+    testImplementation "org.mockito:mockito-core:2.8.9"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}"
+    testImplementation "com.nhaarman:mockito-kotlin:${kotlin_version}"
+    testImplementation ("android.arch.core:core-testing:$androidArchVersion", {
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+    })
+    androidTestImplementation("android.arch.core:core-testing:$androidArchVersion", {})
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"

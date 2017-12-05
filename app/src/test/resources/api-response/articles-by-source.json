@@ -1,0 +1,125 @@
+{
+  "status": "ok",
+  "articles": [
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "New warnings over US shift on Jerusalem",
+      "description": "France is the latest nation to warn Donald Trump against recognising Jerusalem as Israel's capital.",
+      "url": "http://www.bbc.co.uk/news/world-middle-east-42232158",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/01A8/production/_99042400_043316411.jpg",
+      "publishedAt": "2017-12-05T01:55:55Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Supreme court backs Trump travel ban",
+      "description": "US Supreme Court allows President Trump's travel ban on six mainly Muslim countries to go fully into effect",
+      "url": "http://www.bbc.co.uk/news/world-us-canada-42231806",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/7A23/production/_97176213_breaking_news_bigger.png",
+      "publishedAt": "2017-12-04T21:19:04Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Ocean plastic a 'planetary crisis' - UN",
+      "description": "Life in the seas risks irreparable damage from the ever-increasing tide of plastic waste, the UN's head of oceans has warned.",
+      "url": "http://www.bbc.co.uk/news/science-environment-42225915",
+      "urlToImage": "https://ichef-1.bbci.co.uk/news/1024/cpsprodpb/0A37/production/_99051620_mediaitem99051619.jpg",
+      "publishedAt": "2017-12-05T00:10:08Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "PM in Brussels for key Brexit talks",
+      "description": "EU officials say deals were reached at the weekend on the UK \"divorce bill\" and citizens' rights.",
+      "url": "http://www.bbc.co.uk/news/uk-politics-42217735",
+      "urlToImage": "https://ichef-1.bbci.co.uk/news/1024/cpsprodpb/2084/production/_99042380_may_reuters.jpg",
+      "publishedAt": "2017-12-04T03:15:06Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Trump ends federal protection for US parks",
+      "description": "Bears Ears and Grand Staircase Escalante monuments are expected to be significantly reduced.",
+      "url": "http://www.bbc.co.uk/news/world-us-canada-42226752",
+      "urlToImage": "https://ichef-1.bbci.co.uk/news/1024/cpsprodpb/F663/production/_99057036_gettyimages-682630060.jpg",
+      "publishedAt": "2017-12-04T19:39:40Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "6,500 people buy crumbling castle",
+      "description": "Internet users join forces to buy Mothe-Chandeniers chateau in France, hoping to restore it.",
+      "url": "http://www.bbc.co.uk/news/world-europe-42232308",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/148D9/production/_99058148_p05q3jdm.jpg",
+      "publishedAt": "2017-12-05T00:20:51Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Yiannopoulos event prompts violent protests",
+      "description": "Australian police arrest two people in clashes over a talk hosted by the ultra-conservative figure.",
+      "url": "http://www.bbc.co.uk/news/world-australia-42232285",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/205D/production/_99058280_cd30d65a-0aa2-4695-8e76-fbf456284304.jpg",
+      "publishedAt": "2017-12-05T01:16:41Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Why yellow is banned in Catalonia",
+      "description": "Yellow lights, yellow ribbons, even yellow fountains are not allowed.",
+      "url": "http://www.bbc.co.uk/news/world-europe-42219702",
+      "urlToImage": "https://ichef-1.bbci.co.uk/news/1024/cpsprodpb/17D6C/production/_99044679_p05q046y.jpg",
+      "publishedAt": "2017-12-05T00:55:29Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Freddie Mercury film director fired",
+      "description": "The film, titled Bohemian Rhapsody, will tell the story of the late Queen frontman's life.",
+      "url": "http://www.bbc.co.uk/news/entertainment-arts-42231387",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/62C5/production/_99058252_gettyimages-493841602.jpg",
+      "publishedAt": "2017-12-04T23:47:16Z"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "'Millions misspent' during Mandela funeral",
+      "description": "Money earmarked for schools and hospitals was used for commemorative T-shirts, a report says.",
+      "url": "http://www.bbc.co.uk/news/world-africa-42224937",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/cpsprodpb/15364/production/_99048868_76c112a7-a40b-414d-96e3-f152e4411f3d.jpg",
+      "publishedAt": "2017-12-04T18:48:43Z"
+    }
+  ]
+}

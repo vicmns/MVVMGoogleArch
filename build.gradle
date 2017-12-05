@@ -38,6 +38,7 @@ allprojects {
         okhttpVersion = "3.7.0"
         junitVersion = "4.12"
         timberVersion = "4.5.1"
+        mockwebserver = "3.8.1"
     }
 }
 
