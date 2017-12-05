@@ -8,6 +8,7 @@ import com.lonelystudios.palantir.net.utils.ApiResponse
 import com.lonelystudios.palantir.net.utils.CancelableRetrofitLiveDataCall
 import com.lonelystudios.palantir.vo.SortBy
 import com.lonelystudios.palantir.vo.sources.Articles
+import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Sources
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,7 +18,7 @@ interface NewsService {
     fun getAllSources(): CancelableRetrofitLiveDataCall<ApiResponse<Sources>>
 
     @GET("sources")
-    fun getAllSourcesByCategory(@Query("category") category: String): CancelableRetrofitLiveDataCall<ApiResponse<Sources>>
+    fun getAllSourcesByCategory(@Query("category") @Source.Category category: String): CancelableRetrofitLiveDataCall<ApiResponse<Sources>>
 
     @GET("sources")
     fun getAllSourcesByLanguage(@Query("language") language: String): CancelableRetrofitLiveDataCall<ApiResponse<Sources>>
@@ -35,6 +36,6 @@ interface NewsService {
 
     @GET("top-headlines")
     fun getArticlesBySourceSortedBy(@Query("sources") source: String,
-                                    @Query("sortBy") @SortBy.Companion.Sort sortBy: String):
+                                    @Query("sortBy") @SortBy.Sort sortBy: String):
             CancelableRetrofitLiveDataCall<ApiResponse<Articles>>
 }
