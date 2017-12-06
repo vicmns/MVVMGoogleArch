@@ -28,5 +28,8 @@ data class Article(
         var title: String? = null,
 
         @field:SerializedName("url")
-        var url: String? = null
+        var url: String? = null,
+
+        @field:SerializedName("source")
+        var source: ArticleSource
 )

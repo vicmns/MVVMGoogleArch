@@ -84,6 +84,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
     })
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
     androidTestImplementation("android.arch.core:core-testing:$androidArchVersion", {})
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

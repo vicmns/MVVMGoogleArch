@@ -40,7 +40,7 @@ protected constructor(private val appExecutors: AppExecutors) {
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        result.setValue(Resource.loading(null))
+        result.value = Resource.loading(null)
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)

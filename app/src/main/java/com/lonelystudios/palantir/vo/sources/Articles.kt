@@ -12,12 +12,6 @@ import javax.annotation.Generated
 data class Articles(
         @PrimaryKey(autoGenerate = true) var id: Long = -1,
 
-        @field:SerializedName("sortBy")
-        var sortBy: String = SortBy.TOP,
-
-        @field:SerializedName("source")
-        var source: String? = "",
-
         @Ignore
         @field:SerializedName("articles")
         var articles: List<Article>? = ArrayList(),
