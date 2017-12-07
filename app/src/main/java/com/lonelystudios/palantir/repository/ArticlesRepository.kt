@@ -9,6 +9,7 @@ import com.lonelystudios.palantir.repository.util.CancelableNetworkBoundResource
 import com.lonelystudios.palantir.repository.util.CancelableNoDatabaseNetworkBoundResource
 import com.lonelystudios.palantir.utils.AppExecutors
 import com.lonelystudios.palantir.vo.Resource
+import com.lonelystudios.palantir.vo.sources.Article
 import com.lonelystudios.palantir.vo.sources.Articles
 import com.lonelystudios.palantir.vo.sources.Source
 import java.util.*
@@ -22,18 +23,18 @@ class ArticlesRepository @Inject constructor(private val articlesDao: ArticlesDa
                                              private val newsService: NewsService,
                                              private val appExecutors: AppExecutors) {
 
-    lateinit var articlesBySourceResource: CancelableNetworkBoundResource<Articles, Articles>
+    lateinit var articlesBySourceResource: CancelableNetworkBoundResource<List<Article>, Articles>
     lateinit var allArticlesResource: CancelableNoDatabaseNetworkBoundResource<Articles>
 
-    fun getArticlesBySource(source: Source): LiveData<Resource<Articles>> {
-        articlesBySourceResource = object : CancelableNetworkBoundResource<Articles, Articles>(appExecutors) {
+    fun getArticlesBySource(source: Source): LiveData<Resource<List<Article>>> {
+        articlesBySourceResource = object : CancelableNetworkBoundResource<List<Article>, Articles>(appExecutors) {
             override fun saveCallResult(item: Articles) {
-                articlesDao.updateArticlesItem(item)
+                item.articles?.let { articlesDao.updateArticleListItems(it) }
             }
 
-            override fun shouldFetch(data: Articles?): Boolean = true
+            override fun shouldFetch(data: List<Article>?): Boolean = true
 
-            override fun loadFromDb(): LiveData<Articles> =
+            override fun loadFromDb(): LiveData<List<Article>> =
                     articlesDao.getArticlesBySource(source.id)
 
             override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<Articles>> =
@@ -46,7 +47,7 @@ class ArticlesRepository @Inject constructor(private val articlesDao: ArticlesDa
     fun getArticlesBySources(sources: List<Source>): LiveData<Resource<Articles>> {
         allArticlesResource = object : CancelableNoDatabaseNetworkBoundResource<Articles>(appExecutors) {
             override fun saveCallResult(item: Articles) {
-                articlesDao.insertArticlesItem(item)
+                item.articles?.let { articlesDao.insertArticleListItems(it) }
             }
 
             override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<Articles>> {

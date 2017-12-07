@@ -12,7 +12,7 @@ import com.lonelystudios.palantir.vo.sources.Source
 /**
  * Created by vicmns on 10/25/17.
  */
-@Database(entities = arrayOf(Article::class, Articles::class, Source::class),
+@Database(entities = [(Article::class), (Source::class)],
         version = 1)
 @TypeConverters(EnumConverter::class)
 abstract class PalantirDataBase: RoomDatabase() {

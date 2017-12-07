@@ -1,5 +1,6 @@
 package com.lonelystudios.palantir.vo.sources
 
+import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -10,7 +11,7 @@ import javax.annotation.Generated
 data class Article(
         @PrimaryKey(autoGenerate = true) var id: Long? = null,
 
-        var articlesId: Long = -1,
+        //var articlesId: Long = -1,
 
         @field:SerializedName("publishedAt")
         var publishedAt: String? = null,
@@ -30,6 +31,7 @@ data class Article(
         @field:SerializedName("url")
         var url: String? = null,
 
+        @Embedded
         @field:SerializedName("source")
         var source: ArticleSource
 )
