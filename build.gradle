@@ -27,8 +27,8 @@ allprojects {
         androidCompileSdkVersion = 26
         androidMinSdkVersion = 21
         androidTargetSdkVersion = 26
-        supportLibVersion = "26.1.0"
-        androidBuildToolsVersion = "26.0.2"
+        supportLibVersion = "27.0.2"
+        androidBuildToolsVersion = "27.0.0"
         androidArchVersion = "1.0.0"
         androidDataBindingVersion = "2.3.3"
         constraintLayoutVersion = "1.0.2"
