@@ -40,22 +40,22 @@ class NewsDashboardNewsBySourceFragment : Fragment(), Injectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.takeIf { arguments.containsKey(SOURCE_ARGUMENT) }?.apply {
-            source = arguments.getParcelable(SOURCE_ARGUMENT)
+        arguments?.takeIf { arguments!!.containsKey(SOURCE_ARGUMENT) }?.apply {
+            source = arguments!!.getParcelable(SOURCE_ARGUMENT)
         }
         savedInstanceState?.takeIf { savedInstanceState.containsKey(SOURCE_ARGUMENT) }?.apply {
             source = savedInstanceState.getParcelable(SOURCE_ARGUMENT)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_news_dashboard_news_by_source, container, false)
         fragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewsDashboardNewsBySourceFragmentViewModel::class.java)
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolbarTitle()
         initList()
@@ -121,9 +121,9 @@ class NewsDashboardNewsBySourceFragment : Fragment(), Injectable {
         listener = null
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable(SOURCE_ARGUMENT, source)
+        outState.putParcelable(SOURCE_ARGUMENT, source)
     }
 
     companion object {

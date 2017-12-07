@@ -34,7 +34,7 @@ class NewsDashboardFragment : Fragment(), Injectable, NewsDashboardSourcesAdapte
     private lateinit var adapter: NewsDashboardSourcesAdapter
     private var listener: OnNewsDashboardFragmentInteractionListener? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_news_sources, container, false)
         fragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewsDashboardFragmentViewModel::class.java)
@@ -43,12 +43,12 @@ class NewsDashboardFragment : Fragment(), Injectable, NewsDashboardSourcesAdapte
     }
 
     private fun initList() {
-        adapter = NewsDashboardSourcesAdapter(activity, viewModelFactory, this)
+        adapter = NewsDashboardSourcesAdapter(activity!!, viewModelFactory, this)
         binding.newsSourcesList.layoutManager = LinearLayoutManager(context)
         binding.newsSourcesList.adapter = adapter
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         attachObservers()
         attachListeners()

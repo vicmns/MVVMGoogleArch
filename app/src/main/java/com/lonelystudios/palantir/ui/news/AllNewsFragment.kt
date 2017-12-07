@@ -44,12 +44,12 @@ class AllNewsFragment : Fragment(), Injectable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (arguments != null) {
-            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
-        }
+        mColumnCount = arguments?.getInt(ARG_COLUMN_COUNT, 1)!!
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_all_news_list, container, false)
         fragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(AllNewsFragmentViewModel::class.java)
@@ -67,7 +67,7 @@ class AllNewsFragment : Fragment(), Injectable {
         binding.list.adapter = adapter
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         attachObservers()
         setViewsListeners()
