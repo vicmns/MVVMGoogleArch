@@ -11,8 +11,6 @@ import javax.annotation.Generated
 data class Article(
         @PrimaryKey(autoGenerate = true) var id: Long? = null,
 
-        //var articlesId: Long = -1,
-
         @field:SerializedName("publishedAt")
         var publishedAt: String? = null,
 

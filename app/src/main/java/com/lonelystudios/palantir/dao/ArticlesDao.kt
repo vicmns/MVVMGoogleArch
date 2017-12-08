@@ -8,7 +8,7 @@ import com.lonelystudios.palantir.vo.sources.Article
  * Created by vicmns on 10/25/17.
  */
 @Dao
-abstract class ArticlesDao {
+abstract class ArticlesDao: BaseDao<Article> {
 
     @Query("SELECT * FROM Article")
     abstract fun getArticles(): LiveData<List<Article>>
@@ -27,17 +27,5 @@ abstract class ArticlesDao {
 
     @Query("DELETE FROM Article WHERE id = :id")
     abstract fun deleteAllArticlesItemsById(id: Long)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertArticlesItem(article: Article)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertArticleListItems(listOfArticles: List<Article>)
-
-    @Update
-    abstract fun updateArticlesItem(article: Article)
-
-    @Update
-    abstract fun updateArticleListItems(listOfArticles: List<Article>)
 
 }

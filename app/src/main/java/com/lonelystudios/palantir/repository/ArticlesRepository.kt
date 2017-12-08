@@ -29,7 +29,7 @@ class ArticlesRepository @Inject constructor(private val articlesDao: ArticlesDa
     fun getArticlesBySource(source: Source): LiveData<Resource<List<Article>>> {
         articlesBySourceResource = object : CancelableNetworkBoundResource<List<Article>, Articles>(appExecutors) {
             override fun saveCallResult(item: Articles) {
-                item.articles?.let { articlesDao.updateArticleListItems(it) }
+                item.articles?.let { articlesDao.update(*it.toTypedArray()) }
             }
 
             override fun shouldFetch(data: List<Article>?): Boolean = true
@@ -47,7 +47,7 @@ class ArticlesRepository @Inject constructor(private val articlesDao: ArticlesDa
     fun getArticlesBySources(sources: List<Source>): LiveData<Resource<Articles>> {
         allArticlesResource = object : CancelableNoDatabaseNetworkBoundResource<Articles>(appExecutors) {
             override fun saveCallResult(item: Articles) {
-                item.articles?.let { articlesDao.insertArticleListItems(it) }
+                item.articles?.let { articlesDao.insert(*it.toTypedArray()) }
             }
 
             override fun createCall(): CancelableRetrofitLiveDataCall<ApiResponse<Articles>> {
