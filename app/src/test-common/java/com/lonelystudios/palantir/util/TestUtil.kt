@@ -19,10 +19,11 @@ package com.lonelystudios.palantir.util
 import com.lonelystudios.palantir.vo.sources.Article
 import com.lonelystudios.palantir.vo.sources.ArticleSource
 import com.lonelystudios.palantir.vo.sources.Articles
+import com.lonelystudios.palantir.vo.sources.Source
 
 class TestUtil {
     companion object {
-        fun createArticles(status: String, articles: List<Article>) =  Articles(-1, articles, status)
+        fun createArticles(status: String, articles: List<Article>) =  Articles(articles, status)
 
         fun createArticle(publishedAt: String,
                           author: String,
@@ -30,9 +31,11 @@ class TestUtil {
                           description: String,
                           title: String,
                           url: String,
-                          source: ArticleSource) = Article(-1, -1, publishedAt, author,
+                          source: ArticleSource) = Article(-1, publishedAt, author,
                 urlToImage, description, title, url, source)
 
         fun createArticleSource(id: String, name: String) = ArticleSource(id, name)
+
+        fun createSource(id: String) = Source(id)
     }
 }
