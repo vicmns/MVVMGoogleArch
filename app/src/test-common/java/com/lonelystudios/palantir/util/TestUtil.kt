@@ -16,6 +16,8 @@
 
 package com.lonelystudios.palantir.util
 
+import com.lonelystudios.palantir.vo.logo.IconsItem
+import com.lonelystudios.palantir.vo.logo.SourceLogoInfo
 import com.lonelystudios.palantir.vo.sources.Article
 import com.lonelystudios.palantir.vo.sources.ArticleSource
 import com.lonelystudios.palantir.vo.sources.Articles
@@ -37,5 +39,18 @@ class TestUtil {
         fun createArticleSource(id: String, name: String) = ArticleSource(id, name)
 
         fun createSource(id: String) = Source(id)
+
+        fun createSource(id: String, country: String, urlToLogo: String,
+                         name: String, description: String, language: String,
+                         category: String, url: String,
+                         isUserSelected: Boolean) = Source(id, country, urlToLogo,
+                true, name, emptyList(), description, language, category,
+                url, isUserSelected)
+
+        fun createSourceLogoInfo(icons: List<IconsItem>, url: String) = SourceLogoInfo(icons, url)
+
+        fun createIconsItem(bytes: Int, width: Int, height: Int) =
+                IconsItem("", bytes, width, "",
+                        null, "http://dummy.com", height)
     }
 }
