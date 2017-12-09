@@ -41,7 +41,7 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
 
             override fun shouldFetch(data: List<Source>?): Boolean {
                 isUpdate = data?.isNotEmpty() ?: false
-                return data?.isEmpty() ?: false
+                return data?.isEmpty() ?: true
             }
 
             override fun loadFromDb(): LiveData<List<Source>> = sourcesDao.getSources()
