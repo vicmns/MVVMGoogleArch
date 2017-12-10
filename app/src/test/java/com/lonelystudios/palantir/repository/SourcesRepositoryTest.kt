@@ -17,15 +17,13 @@ import com.lonelystudios.palantir.vo.Resource
 import com.lonelystudios.palantir.vo.logo.SourceLogoInfo
 import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Sources
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import java.util.*
 
 /**
@@ -130,5 +128,17 @@ class SourcesRepositoryTest {
 
         updateDbData.postValue(source)
         verify(observer).onChanged(Resource.success(source))
+    }
+
+    @Test
+    fun updateSource() {
+        val source = TestUtil.createSource("foo", "us", "http://foo.bar/logo", "foo",
+                "foo bar news", "en-US", "who", "http://foo.bar/", true)
+        doAnswer {
+            return@doAnswer null
+        }.whenever(dao).update(source)
+        repository.updateSource(source)
+        verify(dao).update(source)
+        verifyNoMoreInteractions(dao)
     }
 }
