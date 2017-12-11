@@ -1,4 +1,4 @@
-package com.lonelystudios.palantir.ui
+package com.lonelystudios.palantir.ui.sources
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

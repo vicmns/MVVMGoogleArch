@@ -9,15 +9,11 @@ import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import com.lonelystudios.palantir.ui.SourceItemViewModel
 import com.lonelystudios.palantir.vo.Resource
 import com.lonelystudios.palantir.vo.sources.Source
 import com.lonelystudios.palantir.vo.sources.Status
 import timber.log.Timber
 import java.util.*
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
 
 
 /**

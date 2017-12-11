@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.lonelystudios.palantir.databinding.FragmentNewsDashboardSourcesItemBinding
-import com.lonelystudios.palantir.ui.SourceItemViewModel
+import com.lonelystudios.palantir.ui.sources.SourceItemViewModel
 import com.lonelystudios.palantir.ui.sources.CommonSourceAdapter
 import com.lonelystudios.palantir.utils.DataBindingAdapters
 import com.lonelystudios.palantir.vo.Resource

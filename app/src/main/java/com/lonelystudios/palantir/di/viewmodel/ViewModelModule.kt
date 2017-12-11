@@ -2,7 +2,7 @@ package com.lonelystudios.palantir.di.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.lonelystudios.palantir.ui.SourceItemViewModel
+import com.lonelystudios.palantir.ui.sources.SourceItemViewModel
 import com.lonelystudios.palantir.ui.news.*
 import com.lonelystudios.palantir.ui.sources.SourcesViewModel
 
