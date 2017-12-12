@@ -19,9 +19,6 @@ abstract class ArticlesDao: BaseDao<Article> {
     @Query("DELETE FROM Article")
     abstract fun deleteAllArticles()
 
-    @Query("DELETE FROM Article")
-    abstract fun deleteAllArticlesItems()
-
     @Query("DELETE FROM Article WHERE source_id = :sourceId")
     abstract fun deleteArticlesBySource(sourceId: String)
 
