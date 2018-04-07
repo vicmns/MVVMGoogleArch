@@ -1,6 +1,8 @@
 package com.lonelystudios.palantir.repository
 
 import android.arch.lifecycle.LiveData
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.lonelystudios.palantir.dao.ArticlesDao
 import com.lonelystudios.palantir.net.NewsService
 import com.lonelystudios.palantir.net.utils.ApiResponse
@@ -19,9 +21,10 @@ import kotlin.collections.ArrayList
 /**
  * Created by vicmns on 11/20/17.
  */
-class ArticlesRepository @Inject constructor(private val articlesDao: ArticlesDao,
-                                             private val newsService: NewsService,
-                                             private val appExecutors: AppExecutors) {
+@AutoFactory
+class ArticlesRepository constructor(private val newsService: NewsService,
+                                             @Provided private val articlesDao: ArticlesDao,
+                                             @Provided private val appExecutors: AppExecutors) {
 
     lateinit var articlesBySourceResource: CancelableNetworkBoundResource<List<Article>, Articles>
     lateinit var allArticlesResource: CancelableNoDatabaseNetworkBoundResource<Articles>

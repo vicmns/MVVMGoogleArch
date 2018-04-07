@@ -41,6 +41,13 @@ android {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'plugin.xml'
+        exclude 'about_files/*'
+        exclude 'plugin.properties'
+        exclude 'META-INF/eclipse.inf'
+    }
 }
 
 dependencies {
@@ -73,6 +80,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$supportLibVersion"
     implementation "com.android.support:customtabs:$supportLibVersion"
     implementation "com.github.vlonjatg:progress-activity:v2.0.3"
+    implementation "com.google.auto.factory:auto-factory:$googleAutoVersion"
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
     testImplementation 'junit:junit:4.12'
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver"
@@ -88,10 +96,14 @@ dependencies {
     androidTestImplementation("android.arch.core:core-testing:$androidArchVersion", {})
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestAnnotationProcessor "com.google.auto.factory:auto-factory:$googleAutoVersion"
+    testAnnotationProcessor "com.google.auto.factory:auto-factory:$googleAutoVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.android.databinding:compiler:$androidDataBindingVersion"
     kapt "android.arch.lifecycle:compiler:$androidArchVersion"
     kapt "android.arch.persistence.room:compiler:$androidArchVersion"
     kapt 'com.github.bumptech.glide:compiler:4.2.0'
+    annotationProcessor "com.google.auto.factory:auto-factory:$googleAutoVersion"
+
 }

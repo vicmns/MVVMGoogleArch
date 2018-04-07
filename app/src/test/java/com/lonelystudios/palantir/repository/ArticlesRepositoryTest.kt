@@ -44,7 +44,7 @@ class ArticlesRepositoryTest {
         service = mock(NewsService::class.java)
         val db = mock(PalantirDataBase::class.java)
         whenever(db.articlesDao()).thenReturn(dao)
-        repository = ArticlesRepository(dao, service, InstantAppExecutors())
+        repository = ArticlesRepository(service, dao, InstantAppExecutors())
     }
 
     @Test

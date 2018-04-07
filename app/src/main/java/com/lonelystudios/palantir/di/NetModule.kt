@@ -55,28 +55,4 @@ class NetModule {
         return client.build()
     }
 
-    @Provides
-    @PerApp
-    fun providesNewsService(okHttpClient: OkHttpClient): NewsService {
-        return Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl("https://newsapi.org/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                .build()
-                .create(NewsService::class.java)
-    }
-
-    @Provides
-    @PerApp
-    fun providesLogoService(okHttpClient: OkHttpClient): LogoService {
-        return Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl("http://icons.better-idea.org")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                .build()
-                .create(LogoService::class.java)
-    }
-
 }

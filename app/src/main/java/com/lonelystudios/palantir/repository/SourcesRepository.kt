@@ -1,6 +1,8 @@
 package com.lonelystudios.palantir.repository
 
 import android.arch.lifecycle.LiveData
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.lonelystudios.palantir.dao.SourcesDao
 import com.lonelystudios.palantir.net.LogoService
 import com.lonelystudios.palantir.net.NewsService
@@ -17,10 +19,11 @@ import javax.inject.Inject
 /**
  * Created by vicmns on 10/27/17.
  */
-class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
-                                            private val newsService: NewsService,
+@AutoFactory
+class SourcesRepository constructor(private val newsService: NewsService,
                                             private val logoService: LogoService,
-                                            private val appExecutors: AppExecutors) {
+                                            @Provided private val sourcesDao: SourcesDao,
+                                            @Provided private val appExecutors: AppExecutors) {
 
     lateinit var sourcesResource: CancelableNetworkBoundResource<List<Source>, Sources>
     lateinit var sourceLogo: CancelableNetworkBoundResource<Source, SourceLogoInfo>
@@ -32,7 +35,7 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
 
             override fun saveCallResult(item: Sources) {
                 val sourceList = item.sources
-                if(isUpdate) {
+                if (isUpdate) {
                     sourcesDao.update(*sourceList.toTypedArray())
                 } else {
                     sourcesDao.insert(*sourceList.toTypedArray())
@@ -60,7 +63,7 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
             override fun saveCallResult(item: SourceLogoInfo) {
                 val iconItem = item.icons?.maxBy { iconsItem -> iconsItem.bytes }
                 source.urlToLogo = iconItem?.url
-                if(iconItem == null) source.isUrlLogoAvailable = false
+                if (iconItem == null) source.isUrlLogoAvailable = false
                 sourcesDao.update(source)
             }
 
@@ -76,7 +79,7 @@ class SourcesRepository @Inject constructor(private val sourcesDao: SourcesDao,
         return sourceLogo.asLiveData()
     }
 
-    fun updateSource(source: Source){
+    fun updateSource(source: Source) {
         appExecutors.diskIO().execute {
             sourcesDao.update(source)
         }

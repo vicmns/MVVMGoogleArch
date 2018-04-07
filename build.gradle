@@ -39,6 +39,7 @@ allprojects {
         junitVersion = "4.12"
         timberVersion = "4.5.1"
         mockwebserver = "3.8.1"
+        googleAutoVersion = "1.0-beta5"
     }
 }
 
