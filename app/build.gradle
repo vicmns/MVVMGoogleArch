@@ -11,12 +11,12 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "26.0.2"
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion "$androidBuildToolsVersion"
     defaultConfig {
         applicationId "com.lonelystudios.palantir"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -78,7 +78,7 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver"
     testImplementation "org.mockito:mockito-core:2.8.9"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}"
-    testImplementation "com.nhaarman:mockito-kotlin:${kotlin_version}"
+    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
     testImplementation ("android.arch.core:core-testing:$androidArchVersion", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
